@@ -1,5 +1,26 @@
 const { ApolloServer, gql } = require("apollo-server");
 
+const users = [
+  {
+    id: 1,
+    name: "João Silva",
+    email: "joao@silva.com",
+    age: 29
+  },
+  {
+    id: 2,
+    name: "Rafel Junior",
+    email: "rafael@junior.com.br",
+    age: 31
+  },
+  {
+    id: 3,
+    name: "Daniela Simth",
+    email: "dani@smith.net",
+    age: 24
+  }
+];
+
 // Type definitions define the "shape" of your data and specify
 // which ways the data can be fetched from the GraphQL server.
 const typeDefs = gql`
@@ -27,6 +48,8 @@ const typeDefs = gql`
     timeNow: String!
     loggedUser: User
     featuredProduct: Product
+    lotteryNumbers: [Int!]!
+    users: [User]
   }
 `;
 
@@ -42,12 +65,12 @@ const resolvers = {
       return user.real_salary;
     }
   },
-  Product:{
-    priceWithDiscount(product){
-      if(product.discount){
-        return product.price * (1 - product.discount)
-      }else{
-        return product.price
+  Product: {
+    priceWithDiscount(product) {
+      if (product.discount) {
+        return product.price * (1 - product.discount);
+      } else {
+        return product.price;
       }
     }
   },
@@ -75,6 +98,16 @@ const resolvers = {
         price: 5000.0,
         discount: 0.3
       };
+    },
+    lotteryNumbers() {
+      const ascending = (a, b) => a - b;
+      return Array(6)
+        .fill(0)
+        .map(n => parseInt(Math.random() * 60 + 1))
+        .sort(ascending);
+    },
+    users() {
+      return users;
     }
   }
 };
