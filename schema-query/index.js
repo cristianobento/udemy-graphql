@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require("apollo-server");
+const { importSchema } = require("graphql-import");
 
 const profiles = [{ id: 1, name: "common" }, { id: 2, name: "administrator" }];
 
@@ -25,47 +26,6 @@ const users = [
     age: 24
   }
 ];
-
-// Type definitions define the "shape" of your data and specify
-// which ways the data can be fetched from the GraphQL server.
-const typeDefs = gql`
-  #type Query is the entrypoints for your API!
-  scalar Date
-
-  type Product {
-    name: String!
-    price: Float!
-    discount: Float
-    priceWithDiscount: Float
-  }
-
-  type User {
-    id: Int
-    name: String!
-    email: String!
-    age: Int
-    salary: Float
-    vip: Boolean
-    profile: Profile
-  }
-
-  type Profile {
-    id: Int
-    name: String
-  }
-
-  type Query {
-    hello: String!
-    timeNow: String!
-    loggedUser: User
-    featuredProduct: Product
-    lotteryNumbers: [Int!]!
-    users: [User]
-    user(id: Int): User
-    profiles: [Profile]
-    profile(id: Int): Profile
-  }
-`;
 
 // Resolvers define the technique for fetching the types in the
 // schema.
@@ -148,10 +108,39 @@ const resolvers = {
 // In the most basic sense, the ApolloServer can be started
 // by passing type definitions (typeDefs) and the resolvers
 // responsible for fetching the data for those types.
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs: importSchema("./schema/index.graphql"),
+  resolvers
+});
 
 // This `listen` method launches a web-server.  Existing apps
 // can utilize middleware options, which we'll discuss later.
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });
+
+/* On your graphiQl */
+// Fragment
+
+// this query uses fragment. Use it like a spread operator
+// query {
+//   user(id: 3) {
+//     ...completedUser
+//   }
+//   users {
+//     ...completedUser
+//   }
+// }
+
+// Defines a fragment to be reused on queries above
+// fragment completedUser on User {
+//   id
+//   name
+//   email
+//   salary
+//   vip
+//   profile {
+//     name
+//     id
+//   }
+// }

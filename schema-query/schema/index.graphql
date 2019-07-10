@@ -1,0 +1,8 @@
+#import User, Profile from 'user.graphql'
+#import Query from 'query.graphql'
+#import Product from 'product.graphql'
+
+# Type definitions define the "shape" of your data and specify
+# which ways the data can be fetched from the GraphQL server.
+
+scalar Date
