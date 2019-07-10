@@ -1,20 +1,25 @@
 const { ApolloServer, gql } = require("apollo-server");
 
+const profiles = [{ id: 1, name: "common" }, { id: 2, name: "administrator" }];
+
 const users = [
   {
     id: 1,
+    profile_id: 1,
     name: "João Silva",
     email: "joao@silva.com",
     age: 29
   },
   {
     id: 2,
+    profile_id: 2,
     name: "Rafel Junior",
     email: "rafael@junior.com.br",
     age: 31
   },
   {
     id: 3,
+    profile_id: 1,
     name: "Daniela Simth",
     email: "dani@smith.net",
     age: 24
@@ -35,12 +40,18 @@ const typeDefs = gql`
   }
 
   type User {
-    id: ID
+    id: Int
     name: String!
     email: String!
     age: Int
     salary: Float
     vip: Boolean
+    profile: Profile
+  }
+
+  type Profile {
+    id: Int
+    name: String
   }
 
   type Query {
@@ -50,6 +61,9 @@ const typeDefs = gql`
     featuredProduct: Product
     lotteryNumbers: [Int!]!
     users: [User]
+    user(id: Int): User
+    profiles: [Profile]
+    profile(id: Int): Profile
   }
 `;
 
@@ -63,6 +77,10 @@ const resolvers = {
   User: {
     salary(user) {
       return user.real_salary;
+    },
+    profile(user) {
+      const selected = profiles.filter(p => p.id === user.profile_id);
+      return selected ? selected[0] : null;
     }
   },
   Product: {
@@ -108,6 +126,21 @@ const resolvers = {
     },
     users() {
       return users;
+    },
+    user(_, args) {
+      const selected = users.filter(u => u.id === args.id);
+      return selected ? selected[0] : null;
+    },
+
+    profiles() {
+      return profiles;
+    },
+
+    // deconstructing: id is the same as args.id
+    // profile(_, args)
+    profile(_, { id }) {
+      const selected = profiles.filter(p => p.id === id);
+      return selected ? selected[0] : null;
     }
   }
 };
