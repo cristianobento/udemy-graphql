@@ -1,5 +1,7 @@
 type Mutation {
-  novoUsuario(nome: String, email: String, idade: Int): Usuario!
+  # Removing this method to add input usage
+  # novoUsuario(nome: String, email: String, idade: Int): Usuario!
+  novoUsuario(dados: UsuarioInput!): Usuario!
 
   excluirUsuario(id: Int!): Usuario
 
