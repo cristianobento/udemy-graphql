@@ -10,4 +10,8 @@ type Mutation {
   # Removing this method to add input usage
   # alterarUsuario(id: Int!, nome: String, email: String, idade: Int): Usuario!
   alterarUsuario(filtro: UsuarioFiltro!, dados: UsuarioInput!): Usuario!
+
+  novoPerfil(dados: PerfilInput!): Perfil!
+  excluirPerfil(filtro: PerfilFiltro!): Perfil!
+  alterarPerfil(filtro: PerfilFiltro!, dados: PerfilInput!): Perfil!
 }
