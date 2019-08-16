@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  mysqlsrv:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_PASSWORD: "root"
+    ports:
+      - "3306:3306"
+    container_name: msql-graphql
+    volumes:
+      - ./db:/var/lib/mysql
+    networks:
+      msqlsrv:
+        ipv4_address: 172.19.0.16
+
+networks:
+  msqlsrv:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.19.0.0/24
