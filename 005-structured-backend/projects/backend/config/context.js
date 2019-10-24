@@ -26,9 +26,6 @@ module.exports = async ({ req }) => {
   }
 
   const err = new Error("Acesso negado!");
-  console.log(usuario);
-  console.log(admin);
-
 
   return {
     usuario,
