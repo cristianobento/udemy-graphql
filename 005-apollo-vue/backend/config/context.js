@@ -45,6 +45,6 @@ module.exports = async ({ req }) => {
       if (!id && !email) throw err;
       if (id && id !== usuario.id) throw err;
       if (email && email !== usuario.email) throw err;
-    }
+    },
   };
 };

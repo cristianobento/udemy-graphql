@@ -22,7 +22,7 @@ const getUsuario = async nomePerfil => {
 };
 
 module.exports = async req => {
-  const usuario = await getUsuario("comum");
+  const usuario = await getUsuario("Admin");
 
   if (usuario) {
     const { token } = await getUsuarioLogado(usuario);

@@ -4,9 +4,7 @@ const { getUsuarioLogado } = require("../Comum/usuario");
 
 module.exports = {
   async login(_, { dados }) {
-    const usuario = await db("usuarios")
-      .where({ email: dados.email })
-      .first();
+    const usuario = await db("usuarios").where({ email: dados.email }).first();
 
     if (!usuario) {
       throw new Error("Usuário/Senha inválidos");
@@ -24,20 +22,16 @@ module.exports = {
     context && context.validarAdmin();
     return db("usuarios");
   },
-  usuario(_, { filtro }) {
+  usuario(_, { filtro }, context) {
     context && context.validarUsuarioFiltro(filtro);
     if (!filtro) return null;
     const { id, email } = filtro;
     if (id) {
-      return db("usuarios")
-        .where({ id })
-        .first();
+      return db("usuarios").where({ id }).first();
     } else if (email) {
-      return db("usuarios")
-        .where({ email })
-        .first();
+      return db("usuarios").where({ email }).first();
     } else {
       return null;
     }
-  }
+  },
 };

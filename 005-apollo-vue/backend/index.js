@@ -14,3 +14,9 @@ const server = new ApolloServer({
 server.listen().then(({ url }) => {
   console.log(`Executando em ${url}`);
 });
+
+process.once('SIGUSR2', function () {
+  server.close(function () {
+    process.kill(process.pid, 'SIGUSR2')
+  })
+})
