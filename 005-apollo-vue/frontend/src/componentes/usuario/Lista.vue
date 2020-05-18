@@ -29,6 +29,7 @@
 
 <script>
 import Erros from "../comum/Erros";
+import gql from "graphql-tag";
 
 export default {
   components: { Erros },
@@ -46,7 +47,31 @@ export default {
   },
   methods: {
     obterUsuarios() {
-      console.log(this.$api);
+      this.$api
+        .query({
+          query: gql`
+            query {
+              usuarios {
+                id
+                nome
+                email
+                perfis {
+                  nome
+                  rotulo
+                }
+              }
+            }
+          `,
+          fetchPolicy: "network-only"
+        })
+        .then(resultado => {
+          this.usuarios = resultado.data.usuarios;
+          this.erros = null;
+        })
+        .catch(e => {
+          this.usuarios = [];
+          this.erros = e;
+        });
     }
   }
 };
